@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OceanDrive | Vehicle Rental + Maritime Transport</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .heading { font-family: 'Playfair Display', sans-serif; }
+        .hero-bg { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://picsum.photos/id/1015/2000/1200') center/cover fixed; }
+        .car-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .car-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white">
+
+    <!-- NAVBAR -->
+    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-lg z-50 border-b border-zinc-800">
+        <div class="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <i class="fa-solid fa-ship text-4xl text-blue-500"></i>
+                <span class="heading text-4xl tracking-tighter" id="logo">OceanDrive</span>
+            </div>
+            
+            <div id="desktop-menu" class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a onclick="document.getElementById('flota').scrollIntoView({ behavior: 'smooth' })" class="hover:text-blue-400 transition cursor-pointer" id="nav-fleet">Flota</a>
+                <a onclick="document.getElementById('comparar').scrollIntoView({ behavior: 'smooth' })" class="hover:text-blue-400 transition cursor-pointer" id="nav-compare">Comparar</a>
+                <a onclick="document.getElementById('testimonios').scrollIntoView({ behavior: 'smooth' })" class="hover:text-blue-400 transition cursor-pointer" id="nav-testimonials">Testimonios</a>
+            </div>
+
+            <div class="flex items-center gap-4">
+                <button onclick="toggleLanguage()" id="lang-btn" class="px-6 py-3 border border-white/30 rounded-full text-sm font-medium">EN</button>
+                <button onclick="showReservationModal()" class="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 rounded-full font-semibold" id="nav-reserve">Reservar Ahora</button>
+                <button onclick="toggleMobileMenu()" class="md:hidden text-2xl" id="hamburger-btn">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/95 border-t border-zinc-800 py-4">
+            <div class="flex flex-col px-8 gap-4 text-sm font-medium">
+                <a onclick="document.getElementById('flota').scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu()" class="hover:text-blue-400 transition cursor-pointer" id="mobile-nav-fleet">Flota</a>
+                <a onclick="document.getElementById('comparar').scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu()" class="hover:text-blue-400 transition cursor-pointer" id="mobile-nav-compare">Comparar</a>
+                <a onclick="document.getElementById('testimonios').scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu()" class="hover:text-blue-400 transition cursor-pointer" id="mobile-nav-testimonials">Testimonios</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero-bg h-screen flex items-center">
+        <div class="max-w-7xl mx-auto px-8 text-center">
+            <h1 id="hero-title" class="heading text-6xl md:text-7xl font-bold leading-tight mb-6">Alquila. Reserva.<br>Transporta por mar.</h1>
+            <p id="hero-subtitle" class="text-2xl text-zinc-200 max-w-2xl mx-auto">La forma más fácil y segura de alquilar tu vehículo con transporte marítimo.</p>
+        </div>
+    </section>
+
+    <!-- FLOTA -->
+    <section id="flota" class="py-24">
+        <div class="max-w-7xl mx-auto px-8">
+            <h2 id="flota-title" class="heading text-5xl text-center mb-12">Nuestra Flota</h2>
+            <div id="cars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
+        </div>
+    </section>
+
+    <!-- COMPARADOR -->
+    <section id="comparar" class="py-24 bg-zinc-900">
+        <div class="max-w-7xl mx-auto px-8">
+            <h2 id="compare-title" class="heading text-5xl text-center mb-8">Compara hasta 3 vehículos</h2>
+            <div id="comparison-area" class="hidden bg-zinc-800 rounded-3xl p-8">
+                <div class="flex justify-between mb-8">
+                    <h3 id="compare-header">Vehículos Seleccionados</h3>
+                    <button onclick="clearComparison()" id="clear-btn" class="text-red-400 hover:text-red-500">Limpiar Todo</button>
+                </div>
+                <div id="compare-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIOS -->
+    <section id="testimonios" class="py-24">
+        <div class="max-w-7xl mx-auto px-8">
+            <h2 id="testimonials-title" class="heading text-5xl text-center mb-16">Lo que dicen nuestros clientes</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-700 hover:border-blue-500/30 transition-all">
+                    <div class="flex mb-6">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-zinc-200">"Excelente servicio. Mi auto llegó perfecto a Panamá. El transporte marítimo fue impecable."</p>
+                    <p class="mt-6 text-sm text-zinc-400">- Carlos M., Panamá</p>
+                </div>
+                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-700 hover:border-blue-500/30 transition-all">
+                    <div class="flex mb-6">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-zinc-200">"Muy fácil de reservar y seguimiento excelente. Todo el proceso fue transparente."</p>
+                    <p class="mt-6 text-sm text-zinc-400">- Laura V., Costa Rica</p>
+                </div>
+                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-700 hover:border-blue-500/30 transition-all">
+                    <div class="flex mb-6">
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                        <i class="fa-solid fa-star text-yellow-400"></i>
+                    </div>
+                    <p class="text-zinc-200">"Llegó antes de lo esperado y en perfectas condiciones. Totalmente recomendado."</p>
+                    <p class="mt-6 text-sm text-zinc-400">- Miguel R., Colombia</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-black py-20">
+        <div class="max-w-7xl mx-auto px-8 text-center">
+            <p id="footer-cta" class="text-4xl heading mb-8">¿Listo para tu próximo viaje?</p>
+            <button onclick="showReservationModal()" class="px-16 py-7 bg-blue-600 text-2xl rounded-full hover:bg-blue-700 transition" id="footer-reserve">Hacer Reserva</button>
+            <div class="mt-16 text-zinc-500">
+                <p>OceanDrive © 2026 • Todos los derechos reservados</p>
+                <p class="mt-2">📍 Costa Rica • Panamá • Colombia</p>
+                <p class="mt-1">📞 +506 8888 8888 | 📧 info@oceandrive.com</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- RESERVATION MODAL -->
+    <div id="reservation-modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
+        <div class="bg-zinc-900 rounded-3xl max-w-md w-full mx-4 p-10 relative">
+            <button onclick="closeModal()" class="absolute top-6 right-6 text-4xl hover:text-red-500">&times;</button>
+            <h3 id="modal-title" class="text-3xl mb-8 text-center">Iniciar Reserva</h3>
+            <input type="text" id="name-input" placeholder="Nombre completo" class="w-full px-6 py-4 bg-zinc-800 rounded-2xl mb-4">
+            <input type="email" id="email-input" placeholder="Correo electrónico" class="w-full px-6 py-4 bg-zinc-800 rounded-2xl mb-4">
+            <input type="text" id="license-input" placeholder="Número de licencia" class="w-full px-6 py-4 bg-zinc-800 rounded-2xl mb-8">
+            <button onclick="submitReservation()" class="w-full py-6 bg-blue-600 rounded-2xl text-xl font-semibold" id="modal-btn">Continuar al Pago</button>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'es';
+        let selectedCompare = [];
+
+        const translations = {
+            es: {
+                logo: "OceanDrive",
+                navReserve: "Reservar Ahora",
+                navFleet: "Flota",
+                navCompare: "Comparar",
+                navTestimonials: "Testimonios",
+                heroTitle: "Alquila. Reserva.<br>Transporta por mar.",
+                heroSubtitle: "La forma más fácil y segura de alquilar tu vehículo con transporte marítimo.",
+                flotaTitle: "Nuestra Flota",
+                compareTitle: "Compara hasta 3 vehículos",
+                compareHeader: "Vehículos Seleccionados",
+                clearBtn: "Limpiar Todo",
+                testimonialsTitle: "Lo que dicen nuestros clientes",
+                footerCta: "¿Listo para tu próximo viaje?",
+                footerReserve: "Hacer Reserva",
+                modalTitle: "Iniciar Reserva",
+                namePlaceholder: "Nombre completo",
+                emailPlaceholder: "Correo electrónico",
+                licensePlaceholder: "Número de licencia",
+                modalBtn: "Continuar al Pago"
+            },
+            en: {
+                logo: "OceanDrive",
+                navReserve: "Book Now",
+                navFleet: "Fleet",
+                navCompare: "Compare",
+                navTestimonials: "Testimonials",
+                heroTitle: "Rent. Reserve.<br>Ship by Sea.",
+                heroSubtitle: "The easiest and safest way to rent your vehicle with maritime shipping.",
+                flotaTitle: "Our Fleet",
+                compareTitle: "Compare up to 3 vehicles",
+                compareHeader: "Selected Vehicles",
+                clearBtn: "Clear All",
+                testimonialsTitle: "What our clients say",
+                footerCta: "Ready for your next journey?",
+                footerReserve: "Make Reservation",
+                modalTitle: "Start Booking",
+                namePlaceholder: "Full Name",
+                emailPlaceholder: "Email Address",
+                licensePlaceholder: "License Number",
+                modalBtn: "Continue to Payment"
+            }
+        };
+
+        const cars = [
+            {id:1, name:"Toyota RAV4 Hybrid", price:89, hp:219, cons:6.8, weight:1650, img:"https://picsum.photos/id/1015/600/400"},
+            {id:2, name:"Honda CR-V", price:79, hp:190, cons:7.5, weight:1580, img:"https://picsum.photos/id/133/600/400"},
+            {id:3, name:"Ford F-150", price:115, hp:400, cons:12, weight:2100, img:"https://picsum.photos/id/201/600/400"},
+            {id:4, name:"Tesla Model Y", price:139, hp:450, cons:2.8, weight:2000, img:"https://picsum.photos/id/251/600/400"},
+            {id:5, name:"BMW X5", price:149, hp:335, cons:9.8, weight:2180, img:"https://picsum.photos/id/180/600/400"},
+            {id:6, name:"Mercedes GLC 300", price:129, hp:255, cons:8.2, weight:1920, img:"https://picsum.photos/id/201/600/400"},
+            {id:7, name:"Jeep Wrangler Rubicon", price:95, hp:285, cons:11.5, weight:2200, img:"https://picsum.photos/id/251/600/400"},
+            {id:8, name:"Porsche Cayenne", price:189, hp:348, cons:10.5, weight:2250, img:"https://picsum.photos/id/133/600/400"},
+            {id:9, name:"Chevrolet Tahoe", price:135, hp:355, cons:13.2, weight:2450, img:"https://picsum.photos/id/1015/600/400"},
+            {id:10, name:"Hyundai Tucson Hybrid", price:69, hp:227, cons:6.2, weight:1620, img:"https://picsum.photos/id/180/600/400"},
+            {id:11, name:"Audi Q5", price:145, hp:261, cons:8.9, weight:1950, img:"https://picsum.photos/id/201/600/400"},
+            {id:12, name:"Subaru Outback", price:75, hp:182, cons:7.9, weight:1680, img:"https://picsum.photos/id/133/600/400"}
+        ];
+
+        function renderCars() {
+            const grid = document.getElementById('cars-grid');
+            grid.innerHTML = '';
+
+            cars.forEach(car => {
+                const card = document.createElement('div');
+                card.className = 'car-card bg-zinc-900 rounded-3xl overflow-hidden group hover:scale-105 transition-all';
+                card.innerHTML = `
+                    <img src="${car.img}" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-1">${car.name}</h3>
+                        <p class="text-blue-400 text-2xl font-bold">$${car.price}<span class="text-sm font-normal text-zinc-400">/día</span></p>
+                        
+                        <div class="grid grid-cols-3 gap-2 my-6 text-sm">
+                            <div class="text-center">
+                                <p class="text-zinc-400">HP</p>
+                                <p class="font-semibold">${car.hp}</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-zinc-400">Consumo</p>
+                                <p class="font-semibold">${car.cons} L/100km</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-zinc-400">Peso</p>
+                                <p class="font-semibold">${car.weight} kg</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-3">
+                            <button onclick="addToCompare(${car.id})" 
+                                    class="flex-1 py-3 border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white rounded-2xl text-sm font-medium transition">
+                                <i class="fa-solid fa-plus mr-1"></i> Comparar
+                            </button>
+                            <button onclick="showReservationModal()" 
+                                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-2xl text-sm font-semibold transition">
+                                Reservar
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLang];
+
+            document.getElementById('logo').textContent = t.logo;
+            document.getElementById('nav-reserve').textContent = t.navReserve;
+            document.getElementById('nav-fleet').textContent = t.navFleet;
+            document.getElementById('nav-compare').textContent = t.navCompare;
+            document.getElementById('nav-testimonials').textContent = t.navTestimonials;
+            document.getElementById('mobile-nav-fleet').textContent = t.navFleet;
+            document.getElementById('mobile-nav-compare').textContent = t.navCompare;
+            document.getElementById('mobile-nav-testimonials').textContent = t.navTestimonials;
+
+            document.getElementById('hero-title').innerHTML = t.heroTitle;
+            document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
+            document.getElementById('flota-title').textContent = t.flotaTitle;
+            document.getElementById('compare-title').textContent = t.compareTitle;
+            document.getElementById('compare-header').textContent = t.compareHeader;
+            document.getElementById('clear-btn').textContent = t.clearBtn;
+            document.getElementById('testimonials-title').textContent = t.testimonialsTitle;
+            document.getElementById('footer-cta').textContent = t.footerCta;
+            document.getElementById('footer-reserve').textContent = t.footerReserve;
+            document.getElementById('modal-title').textContent = t.modalTitle;
+            document.getElementById('name-input').placeholder = t.namePlaceholder;
+            document.getElementById('email-input').placeholder = t.emailPlaceholder;
+            document.getElementById('license-input').placeholder = t.licensePlaceholder;
+            document.getElementById('modal-btn').textContent = t.modalBtn;
+
+            document.getElementById('lang-btn').textContent = currentLang.toUpperCase();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            updateLanguage();
+        }
+
+        function addToCompare(id) {
+            const car = cars.find(c => c.id === id);
+            if (!car) return;
+            if (selectedCompare.length >= 3) {
+                alert(currentLang === 'es' ? "Solo puedes comparar hasta 3 vehículos" : "You can only compare up to 3 vehicles");
+                return;
+            }
+            if (selectedCompare.some(c => c.id === id)) {
+                alert(currentLang === 'es' ? "Este vehículo ya está en la comparación" : "This vehicle is already in comparison");
+                return;
+            }
+            selectedCompare.push(car);
+            renderComparison();
+        }
+
+        function renderComparison() {
+            const area = document.getElementById('comparison-area');
+            const grid = document.getElementById('compare-grid');
+            grid.innerHTML = '';
+
+            selectedCompare.forEach((car, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-zinc-900 rounded-3xl p-6 relative';
+                div.innerHTML = `
+                    <img src="${car.img}" class="w-full h-40 object-cover rounded-2xl mb-4">
+                    <h4 class="font-semibold text-lg">${car.name}</h4>
+                    <p class="text-blue-400 text-2xl font-bold">$${car.price}/día</p>
+                    <div class="mt-4 space-y-2 text-sm">
+                        <div class="flex justify-between"><span class="text-zinc-400">Potencia</span><span>${car.hp} HP</span></div>
+                        <div class="flex justify-between"><span class="text-zinc-400">Consumo</span><span>${car.cons} L/100km</span></div>
+                        <div class="flex justify-between"><span class="text-zinc-400">Peso</span><span>${car.weight} kg</span></div>
+                    </div>
+                    <button onclick="removeFromCompare(${index})" class="absolute top-4 right-4 text-red-400 hover:text-red-500 text-xl">✕</button>
+                `;
+                grid.appendChild(div);
+            });
+
+            area.classList.remove('hidden');
+        }
+
+        function removeFromCompare(index) {
+            selectedCompare.splice(index, 1);
+            if (selectedCompare.length === 0) {
+                document.getElementById('comparison-area').classList.add('hidden');
+            } else {
+                renderComparison();
+            }
+        }
+
+        function clearComparison() {
+            selectedCompare = [];
+            document.getElementById('comparison-area').classList.add('hidden');
+        }
+
+        function showReservationModal() {
+            document.getElementById('reservation-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('reservation-modal').classList.add('hidden');
+        }
+
+        function submitReservation() {
+            alert(currentLang === 'es' ? "Reserva iniciada (demo)" : "Booking started (demo)");
+            closeModal();
+        }
+
+        window.onload = () => {
+            renderCars();
+            updateLanguage();
+        };
+    </script>
+</body>
+</html>
