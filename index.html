@@ -3,369 +3,821 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OceanDrive | Vehicle Rental + Maritime Transport</title>
+    <meta name="description" content="Reserva tus boletos de ferry Naviera Tambor en línea. Puntarenas ↔ Paquera. Vehículos, pasajeros y carga. Fácil, seguro y rápido.">
+    <meta name="keywords" content="ferry puntarenas paquera, naviera tambor, boletos ferry costa rica, transporte nicoya, ferry con vehículo">
+    <title>Naviera Tambor | Reserva de Ferry en Línea</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
-        body { font-family: 'Inter', system-ui, sans-serif; }
-        .heading { font-family: 'Playfair Display', sans-serif; }
-        .hero-bg { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.8)), url('https://picsum.photos/id/1015/2000/1200') center/cover fixed; }
-        .car-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .car-card:hover { transform: translateY(-8px) scale(1.03); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1); }
+        
+        :root {
+            --primary: #0f766e;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(rgba(15, 118, 110, 0.75), rgba(15, 118, 110, 0.85)), url('https://picsum.photos/id/1015/2000/1200') center/cover no-repeat;
+        }
+        
+        .step-circle {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: #0f766e;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover:after {
+            width: 100%;
+        }
+        
+        .card-hover {
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1), box-shadow 0.3s;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        .lang-btn {
+            transition: all 0.3s;
+        }
+
+        .section {
+            display: none;
+        }
+        .section.active {
+            display: block;
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-white">
-
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 w-full bg-black/95 backdrop-blur-lg z-50 border-b border-zinc-800">
-        <div class="max-w-7xl mx-auto px-8 py-6 flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <i class="fa-solid fa-ship text-4xl text-blue-500"></i>
-                <span class="heading text-4xl tracking-tighter" id="logo">OceanDrive</span>
+<body class="bg-gray-50 font-sans">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center text-white text-2xl font-bold">🚢</div>
+                <div>
+                    <span class="text-2xl font-bold text-teal-800" id="logo-text">Naviera Tambor</span>
+                </div>
             </div>
             
-            <div id="desktop-menu" class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a onclick="document.getElementById('flota').scrollIntoView({ behavior: 'smooth' })" class="hover:text-blue-400 transition cursor-pointer" id="nav-fleet">Flota</a>
-                <a onclick="document.getElementById('comparar').scrollIntoView({ behavior: 'smooth' })" class="hover:text-blue-400 transition cursor-pointer" id="nav-compare">Comparar</a>
-                <a onclick="document.getElementById('testimonios').scrollIntoView({ behavior: 'smooth' })" class="hover:text-blue-400 transition cursor-pointer" id="nav-testimonials">Testimonios</a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="#" onclick="showSection('booking')" class="nav-link text-gray-700 hover:text-teal-700" id="nav-reservar">Reservar</a>
+                <a href="#" onclick="showSection('horarios')" class="nav-link text-gray-700 hover:text-teal-700" id="nav-horarios">Horarios</a>
+                <a href="#" onclick="showSection('tarifas')" class="nav-link text-gray-700 hover:text-teal-700" id="nav-tarifas">Tarifas</a>
+                <a href="#" onclick="showSection('contacto')" class="nav-link text-gray-700 hover:text-teal-700" id="nav-contacto">Contacto</a>
             </div>
-
+            
             <div class="flex items-center gap-4">
-                <button onclick="toggleLanguage()" id="lang-btn" class="px-6 py-3 border border-white/30 rounded-full text-sm font-medium">EN</button>
-                <button onclick="showReservationModal()" class="px-8 py-3.5 bg-blue-600 hover:bg-blue-700 rounded-full font-semibold" id="nav-reserve">Reservar Ahora</button>
-                <button onclick="toggleMobileMenu()" class="md:hidden text-2xl" id="hamburger-btn">
-                    <i class="fa-solid fa-bars"></i>
+                <div class="text-xs bg-teal-100 text-teal-800 px-3 py-1 rounded-full font-medium flex items-center gap-1">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span id="ssl-text">Seguro SSL</span>
+                </div>
+
+                <button onclick="toggleLanguage()" 
+                        class="lang-btn bg-white border border-gray-300 hover:border-teal-700 px-4 py-2 rounded-2xl text-sm font-semibold flex items-center gap-2">
+                    <span id="current-lang">ES</span>
+                    <i class="fa-solid fa-globe"></i>
                 </button>
-            </div>
-        </div>
-        
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-black/95 border-t border-zinc-800 py-4">
-            <div class="flex flex-col px-8 gap-4 text-sm font-medium">
-                <a onclick="document.getElementById('flota').scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu()" class="hover:text-blue-400 transition cursor-pointer" id="mobile-nav-fleet">Flota</a>
-                <a onclick="document.getElementById('comparar').scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu()" class="hover:text-blue-400 transition cursor-pointer" id="mobile-nav-compare">Comparar</a>
-                <a onclick="document.getElementById('testimonios').scrollIntoView({ behavior: 'smooth' }); toggleMobileMenu()" class="hover:text-blue-400 transition cursor-pointer" id="mobile-nav-testimonials">Testimonios</a>
+
+                <button onclick="showSection('booking')" 
+                        class="bg-teal-700 hover:bg-teal-800 text-white px-6 py-3 rounded-2xl font-semibold flex items-center gap-2 transition-all" id="btn-reservar-ahora">
+                    <i class="fa-solid fa-calendar"></i>
+                    <span id="reservar-ahora-text">Reservar Ahora</span>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- HERO -->
-    <section class="hero-bg h-screen flex items-center">
-        <div class="max-w-7xl mx-auto px-8 text-center">
-            <h1 id="hero-title" class="heading text-6xl md:text-7xl font-bold leading-tight mb-6">Alquila. Reserva.<br>Transporta por mar.</h1>
-            <p id="hero-subtitle" class="text-2xl text-zinc-200 max-w-2xl mx-auto">La forma más fácil y segura de alquilar tu vehículo con transporte marítimo.</p>
-        </div>
-    </section>
-
-    <!-- FLOTA -->
-    <section id="flota" class="py-24">
-        <div class="max-w-7xl mx-auto px-8">
-            <h2 id="flota-title" class="heading text-5xl text-center mb-12">Nuestra Flota</h2>
-            <div id="cars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"></div>
-        </div>
-    </section>
-
-    <!-- COMPARADOR -->
-    <section id="comparar" class="py-24 bg-zinc-900">
-        <div class="max-w-7xl mx-auto px-8">
-            <h2 id="compare-title" class="heading text-5xl text-center mb-8">Compara hasta 3 vehículos</h2>
-            <div id="comparison-area" class="hidden bg-zinc-800 rounded-3xl p-8">
-                <div class="flex justify-between mb-8">
-                    <h3 id="compare-header">Vehículos Seleccionados</h3>
-                    <button onclick="clearComparison()" id="clear-btn" class="text-red-400 hover:text-red-500">Limpiar Todo</button>
+    <!-- Hero -->
+    <header class="hero-bg text-white py-24 md:py-32">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="max-w-2xl">
+                <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-3xl mb-6">
+                    <span class="text-xs tracking-widest uppercase font-medium" id="hero-route">Puntarenas ↔ Paquera</span>
                 </div>
-                <div id="compare-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8"></div>
+                <h1 class="text-5xl md:text-6xl font-bold leading-tight mb-6" id="hero-title">
+                    Cruza el Golfo de Nicoya con comodidad
+                </h1>
+                <p class="text-xl text-white/90 mb-10" id="hero-subtitle">
+                    Reserva tu ferry con vehículo, pasajeros y mascotas. Experiencia moderna, segura y confiable.
+                </p>
+                <button onclick="showSection('booking')" 
+                        class="bg-white text-teal-800 hover:bg-teal-50 px-10 py-5 rounded-3xl text-lg font-semibold flex items-center gap-3 group" id="hero-button">
+                    Iniciar Reserva
+                    <i class="fa-solid fa-arrow-right group-active:translate-x-2 transition"></i>
+                </button>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- TESTIMONIOS -->
-    <section id="testimonios" class="py-24">
-        <div class="max-w-7xl mx-auto px-8">
-            <h2 id="testimonials-title" class="heading text-5xl text-center mb-16">Lo que dicen nuestros clientes</h2>
-            <div class="grid md:grid-cols-3 gap-8">
-                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-700 hover:border-blue-500/30 transition-all">
-                    <div class="flex mb-6">
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                    </div>
-                    <p class="text-zinc-200">"Excelente servicio. Mi auto llegó perfecto a Panamá. El transporte marítimo fue impecable."</p>
-                    <p class="mt-6 text-sm text-zinc-400">- Carlos M., Panamá</p>
+    <!-- ==================== BOOKING SECTION (tu código original sin cambios) ==================== -->
+    <div id="booking" class="section active max-w-5xl mx-auto px-6 -mt-10 relative z-10">
+        <div id="booking-container" class="bg-white rounded-3xl shadow-2xl p-8 md:p-10">
+            
+            <!-- Progress -->
+            <div class="flex justify-between mb-12 border-b pb-8">
+                <div onclick="goToStep(1)" class="step-circle cursor-pointer flex flex-col items-center">
+                    <div id="step1-circle" class="w-10 h-10 rounded-2xl bg-teal-700 text-white flex items-center justify-center text-lg font-semibold">1</div>
+                    <div class="text-xs font-medium text-teal-700 mt-2" id="prog-1">Vehículo & Pasajeros</div>
                 </div>
-                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-700 hover:border-blue-500/30 transition-all">
-                    <div class="flex mb-6">
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                    </div>
-                    <p class="text-zinc-200">"Muy fácil de reservar y seguimiento excelente. Todo el proceso fue transparente."</p>
-                    <p class="mt-6 text-sm text-zinc-400">- Laura V., Costa Rica</p>
+                <div class="flex-1 h-0.5 bg-gray-200 self-center mx-4"></div>
+                
+                <div onclick="goToStep(2)" class="step-circle cursor-pointer flex flex-col items-center">
+                    <div id="step2-circle" class="w-10 h-10 rounded-2xl bg-gray-200 flex items-center justify-center text-lg font-semibold">2</div>
+                    <div class="text-xs font-medium text-gray-500 mt-2" id="prog-2">Itinerario</div>
                 </div>
-                <div class="bg-zinc-900 p-8 rounded-3xl border border-zinc-700 hover:border-blue-500/30 transition-all">
-                    <div class="flex mb-6">
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
-                        <i class="fa-solid fa-star text-yellow-400"></i>
+                <div class="flex-1 h-0.5 bg-gray-200 self-center mx-4"></div>
+                
+                <div onclick="goToStep(3)" class="step-circle cursor-pointer flex flex-col items-center">
+                    <div id="step3-circle" class="w-10 h-10 rounded-2xl bg-gray-200 flex items-center justify-center text-lg font-semibold">3</div>
+                    <div class="text-xs font-medium text-gray-500 mt-2" id="prog-3">Confirmar</div>
+                </div>
+                <div class="flex-1 h-0.5 bg-gray-200 self-center mx-4"></div>
+                
+                <div onclick="goToStep(4)" class="step-circle cursor-pointer flex flex-col items-center">
+                    <div id="step4-circle" class="w-10 h-10 rounded-2xl bg-gray-200 flex items-center justify-center text-lg font-semibold">4</div>
+                    <div class="text-xs font-medium text-gray-500 mt-2" id="prog-4">Pago</div>
+                </div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div id="step-1" class="step-content">
+                <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3" id="step1-title">
+                    <span class="text-teal-700">1.</span> Tipo de Vehículo y Pasajeros
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="font-medium mb-4 text-gray-700" id="vehiculo-title">Tipo de Vehículo</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div onclick="selectVehicle(this)" data-price="14500" class="vehicle-option card-hover border-2 border-transparent p-6 rounded-3xl cursor-pointer text-center bg-white">
+                                <i class="fa-solid fa-car text-4xl text-teal-600 mb-3"></i>
+                                <p class="font-semibold" id="veh-auto">Automóvil</p>
+                                <p class="text-xs text-gray-500" id="veh-auto-desc">Hasta 5 pasajeros</p>
+                                <p class="text-teal-600 font-bold mt-2">¢14,500</p>
+                            </div>
+                            <div onclick="selectVehicle(this)" data-price="18500" class="vehicle-option card-hover border-2 border-transparent p-6 rounded-3xl cursor-pointer text-center bg-white">
+                                <i class="fa-solid fa-truck-pickup text-4xl text-teal-600 mb-3"></i>
+                                <p class="font-semibold" id="veh-suv">4x4 / SUV</p>
+                                <p class="text-xs text-gray-500" id="veh-suv-desc">Hasta 7 pasajeros</p>
+                                <p class="text-teal-600 font-bold mt-2">¢18,500</p>
+                            </div>
+                            <div onclick="selectVehicle(this)" data-price="9500" class="vehicle-option card-hover border-2 border-transparent p-6 rounded-3xl cursor-pointer text-center bg-white">
+                                <i class="fa-solid fa-person-walking text-4xl text-teal-600 mb-3"></i>
+                                <p class="font-semibold" id="veh-pasajeros">Solo Pasajeros</p>
+                                <p class="text-xs text-gray-500" id="veh-pasajeros-desc">Sin vehículo</p>
+                                <p class="text-teal-600 font-bold mt-2">¢9,500</p>
+                            </div>
+                            <div onclick="selectVehicle(this)" data-price="32000" class="vehicle-option card-hover border-2 border-transparent p-6 rounded-3xl cursor-pointer text-center bg-white">
+                                <i class="fa-solid fa-van-shuttle text-4xl text-teal-600 mb-3"></i>
+                                <p class="font-semibold" id="veh-van">Van / Camioneta</p>
+                                <p class="text-xs text-gray-500" id="veh-van-desc">Hasta 15 pasajeros</p>
+                                <p class="text-teal-600 font-bold mt-2">¢32,000</p>
+                            </div>
+                        </div>
                     </div>
-                    <p class="text-zinc-200">"Llegó antes de lo esperado y en perfectas condiciones. Totalmente recomendado."</p>
-                    <p class="mt-6 text-sm text-zinc-400">- Miguel R., Colombia</p>
+                    
+                    <div>
+                        <h3 class="font-medium mb-4 text-gray-700" id="pasajeros-title">Número de Pasajeros</h3>
+                        
+                        <div class="space-y-6">
+                            <div>
+                                <label class="flex justify-between text-sm mb-2">
+                                    <span id="label-adultos">Adultos (12+ años)</span>
+                                    <span id="adults-count" class="font-bold text-teal-700">2</span>
+                                </label>
+                                <input type="range" min="1" max="20" value="2" id="adults" 
+                                       oninput="updatePassengers()" class="w-full accent-teal-700">
+                            </div>
+                            
+                            <div>
+                                <label class="flex justify-between text-sm mb-2">
+                                    <span id="label-ninos">Niños (3-11 años)</span>
+                                    <span id="children-count" class="font-bold text-teal-700">0</span>
+                                </label>
+                                <input type="range" min="0" max="10" value="0" id="children" 
+                                       oninput="updatePassengers()" class="w-full accent-teal-700">
+                            </div>
+                            
+                            <div>
+                                <label class="flex justify-between text-sm mb-2">
+                                    <span id="label-mayores">Mayores (65+)</span>
+                                    <span id="seniors-count" class="font-bold text-teal-700">0</span>
+                                </label>
+                                <input type="range" min="0" max="10" value="0" id="seniors" 
+                                       oninput="updatePassengers()" class="w-full accent-teal-700">
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 bg-teal-50 p-5 rounded-2xl">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span id="subtotal-text">Subtotal estimado</span>
+                                <span id="step1-total" class="font-bold">¢29,000</span>
+                            </div>
+                            <p class="text-xs text-teal-600" id="nota-conductor">El conductor del vehículo cuenta como adulto</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end mt-12">
+                    <button onclick="nextStep()" 
+                            class="bg-teal-700 hover:bg-teal-800 text-white px-10 py-4 rounded-2xl font-semibold flex items-center gap-3" id="btn-continuar1">
+                        Continuar 
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2, 3 y 4 (exactamente iguales a tu código) -->
+            <div id="step-2" class="step-content hidden">
+                <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3" id="step2-title">
+                    <span class="text-teal-700">2.</span> Elige Ruta, Fecha y Horario
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div>
+                        <label class="block text-sm font-medium mb-2" id="label-direccion">Dirección</label>
+                        <select id="direction" class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-teal-700">
+                            <option value="PP">Puntarenas → Paquera</option>
+                            <option value="PA">Paquera → Puntarenas</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2" id="label-fecha">Fecha</label>
+                        <input type="date" id="travel-date" value="2026-07-15" 
+                               class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-teal-700">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2" id="label-horario">Horario</label>
+                        <select id="schedule" class="w-full border border-gray-300 rounded-2xl px-5 py-4 focus:outline-none focus:border-teal-700">
+                            <option>06:30 - Llegada 07:45</option>
+                            <option>09:00 - Llegada 10:15</option>
+                            <option>12:00 - Llegada 13:15</option>
+                            <option>15:00 - Llegada 16:15</option>
+                            <option>18:00 - Llegada 19:15</option>
+                            <option>20:00 - Llegada 21:15</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <h3 class="font-medium mb-4" id="info-title">Información importante</h3>
+                    <ul class="space-y-3 text-sm" id="info-list">
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-teal-600 mt-0.5"></i> Presentarse 60 minutos antes</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-teal-600 mt-0.5"></i> Mascotas viajan gratis acompañadas</li>
+                        <li class="flex gap-3"><i class="fa-solid fa-check text-teal-600 mt-0.5"></i> El chofer debe estar incluido en adultos</li>
+                    </ul>
+                </div>
+                
+                <div class="flex gap-4 justify-end mt-12">
+                    <button onclick="prevStep()" 
+                            class="border border-gray-400 hover:bg-gray-50 px-8 py-4 rounded-2xl font-medium" id="btn-anterior">Anterior</button>
+                    <button onclick="nextStep()" 
+                            class="bg-teal-700 hover:bg-teal-800 text-white px-10 py-4 rounded-2xl font-semibold flex items-center gap-3" id="btn-siguiente">
+                        Siguiente 
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="step-3" class="step-content hidden">
+                <h2 class="text-3xl font-semibold mb-8" id="confirm-title">Confirma tus datos</h2>
+                <div class="bg-gray-50 rounded-3xl p-8 mb-8" id="summary"></div>
+                <div class="flex gap-4 justify-end">
+                    <button onclick="prevStep()" class="border border-gray-400 hover:bg-gray-50 px-8 py-4 rounded-2xl font-medium" id="btn-editar">Editar</button>
+                    <button onclick="nextStep()" class="bg-teal-700 hover:bg-teal-800 text-white px-10 py-4 rounded-2xl font-semibold" id="btn-pago">Continuar al Pago</button>
+                </div>
+            </div>
+
+            <div id="step-4" class="step-content hidden">
+                <h2 class="text-3xl font-semibold mb-8 flex items-center gap-3" id="step4-title">
+                    <span class="text-teal-700">4.</span> Resumen y Pago
+                </h2>
+                <div class="grid md:grid-cols-5 gap-8">
+                    <div class="md:col-span-3">
+                        <h3 class="font-semibold mb-4" id="facturacion-title">Datos de Facturación</h3>
+                        <div class="space-y-5">
+                            <div class="grid grid-cols-2 gap-4">
+                                <input type="text" placeholder="Nombre completo" class="border border-gray-300 rounded-2xl px-5 py-4" id="ph-name">
+                                <input type="email" placeholder="Correo electrónico" class="border border-gray-300 rounded-2xl px-5 py-4" id="ph-email">
+                            </div>
+                            <input type="tel" placeholder="Teléfono" class="w-full border border-gray-300 rounded-2xl px-5 py-4" id="ph-phone">
+                            <input type="text" placeholder="Cédula o Pasaporte" class="w-full border border-gray-300 rounded-2xl px-5 py-4" id="ph-id">
+                        </div>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <div class="bg-teal-50 p-6 rounded-3xl">
+                            <h4 class="font-semibold mb-5" id="resumen-pago">Resumen de Pago</h4>
+                            <div id="final-summary" class="space-y-4 text-sm"></div>
+                            <div class="border-t border-dashed my-6"></div>
+                            <div class="flex justify-between font-bold text-lg">
+                                <span id="total-text">Total</span>
+                                <span id="final-total">¢45,000</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-10">
+                    <h3 class="font-semibold mb-4" id="tarjeta-title">Información de Tarjeta</h3>
+                    <div class="max-w-md bg-white border border-gray-200 p-6 rounded-3xl">
+                        <div class="mb-4">
+                            <label class="text-xs block mb-1" id="label-card">Número de Tarjeta</label>
+                            <input type="text" placeholder="4242 4242 4242 4242" class="w-full border rounded-2xl px-4 py-3">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-xs block mb-1" id="label-exp">Fecha de expiración</label>
+                                <input type="text" placeholder="MM / AA" class="w-full border rounded-2xl px-4 py-3">
+                            </div>
+                            <div>
+                                <label class="text-xs block mb-1" id="label-cvc">CVC</label>
+                                <input type="text" placeholder="123" class="w-full border rounded-2xl px-4 py-3">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 justify-end mt-12">
+                    <button onclick="prevStep()" class="border px-8 py-4 rounded-2xl" id="btn-volver">Volver</button>
+                    <button onclick="completeBooking()" 
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white px-12 py-4 rounded-2xl font-semibold flex items-center gap-3">
+                        <i class="fa-solid fa-lock"></i>
+                        <span id="pagar-text">Pagar y Confirmar</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- FOOTER -->
-    <footer class="bg-black py-20">
-        <div class="max-w-7xl mx-auto px-8 text-center">
-            <p id="footer-cta" class="text-4xl heading mb-8">¿Listo para tu próximo viaje?</p>
-            <button onclick="showReservationModal()" class="px-16 py-7 bg-blue-600 text-2xl rounded-full hover:bg-blue-700 transition" id="footer-reserve">Hacer Reserva</button>
-            <div class="mt-16 text-zinc-500">
-                <p>OceanDrive © 2026 • Todos los derechos reservados</p>
-                <p class="mt-2">📍 Costa Rica • Panamá • Colombia</p>
-                <p class="mt-1">📞 +506 8888 8888 | 📧 info@oceandrive.com</p>
+    <!-- ==================== TARIFAS - Comparador de Vehículos (6 vehículos en 2x3) ==================== -->
+    <div id="tarifas" class="section max-w-5xl mx-auto px-6 py-16">
+        <h2 class="text-4xl font-bold text-center mb-12" id="tarifas-title">Tarifas y Comparador de Vehículos</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Fila 1 -->
+            <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
+                <h3 class="text-2xl font-semibold mb-4">Automóvil</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6">¢14,500</p>
+                <ul class="space-y-3 text-sm">
+                    <li>✔ Hasta 5 pasajeros</li>
+                    <li>✔ Consumo aprox: 8-10 L/100km</li>
+                    <li>✔ Ideal para familias pequeñas</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-lg card-hover border-2 border-teal-700">
+                <h3 class="text-2xl font-semibold mb-4">4x4 / SUV</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6">¢18,500</p>
+                <ul class="space-y-3 text-sm">
+                    <li>✔ Hasta 7 pasajeros</li>
+                    <li>✔ Consumo aprox: 10-12 L/100km</li>
+                    <li>✔ Mejor para caminos irregulares</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
+                <h3 class="text-2xl font-semibold mb-4">Van / Camioneta</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6">¢32,000</p>
+                <ul class="space-y-3 text-sm">
+                    <li>✔ Hasta 15 pasajeros</li>
+                    <li>✔ Consumo aprox: 14-16 L/100km</li>
+                    <li>✔ Para grupos grandes</li>
+                </ul>
+            </div>
+
+            <!-- Fila 2 -->
+            <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
+                <h3 class="text-2xl font-semibold mb-4">Moto</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6">¢8,500</p>
+                <ul class="space-y-3 text-sm">
+                    <li>✔ 1-2 pasajeros</li>
+                    <li>✔ Consumo aprox: 4-6 L/100km</li>
+                    <li>✔ Económica y rápida</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
+                <h3 class="text-2xl font-semibold mb-4">Camión Pequeño</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6">¢45,000</p>
+                <ul class="space-y-3 text-sm">
+                    <li>✔ Hasta 3 pasajeros + carga</li>
+                    <li>✔ Consumo aprox: 18-22 L/100km</li>
+                    <li>✔ Para transporte de mercancía</li>
+                </ul>
+            </div>
+            <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
+                <h3 class="text-2xl font-semibold mb-4">Autobús / Mini Bus</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6">¢85,000</p>
+                <ul class="space-y-3 text-sm">
+                    <li>✔ Hasta 30 pasajeros</li>
+                    <li>✔ Consumo aprox: 25-30 L/100km</li>
+                    <li>✔ Para tours y grupos grandes</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== HORARIOS ==================== -->
+    <div id="horarios" class="section max-w-5xl mx-auto px-6 py-16">
+        <h2 class="text-4xl font-bold text-center mb-12" id="horarios-title">Horarios y Disponibilidad</h2>
+        <div class="bg-white rounded-3xl shadow-lg p-8 overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b">
+                        <th class="text-left py-4">Hora Salida</th>
+                        <th class="text-left py-4">Llegada</th>
+                        <th class="text-left py-4">Disponibilidad Vehículos</th>
+                        <th class="text-center py-4">Estado</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <tr class="border-b"><td>06:30</td><td>07:45</td><td>Alta</td><td class="text-green-600 font-medium text-center">Disponible</td></tr>
+                    <tr class="border-b"><td>09:00</td><td>10:15</td><td>Media</td><td class="text-green-600 font-medium text-center">Disponible</td></tr>
+                    <tr class="border-b"><td>12:00</td><td>13:15</td><td>Baja</td><td class="text-orange-600 font-medium text-center">Casi lleno</td></tr>
+                    <tr><td>15:00</td><td>16:15</td><td>Alta</td><td class="text-green-600 font-medium text-center">Disponible</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ==================== CONTACTO / INFORMACIÓN ==================== -->
+    <div id="contacto" class="section max-w-5xl mx-auto px-6 py-16">
+        <h2 class="text-4xl font-bold text-center mb-12" id="contacto-title">Contáctanos</h2>
+        <div class="grid md:grid-cols-2 gap-12">
+            <div>
+                <h3 class="text-2xl font-semibold mb-6">Información de la Empresa</h3>
+                <p class="mb-4"><strong>Naviera Tambor S.A.</strong></p>
+                <p class="mb-4">• Teléfono: +506 2661-2084</p>
+                <p class="mb-4">• Email: info@navieratambor.com</p>
+                <p class="mb-8">Más de 30 años conectando Puntarenas con la Península de Nicoya.</p>
+            </div>
+            <div>
+                <h3 class="text-2xl font-semibold mb-6">Ubicación</h3>
+                <p>Terminal Ferry Puntarenas - Barrio El Carmen</p>
+                <p class="text-gray-600 mt-8">Horario de atención: 4:00 AM - 10:00 PM</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal (sin cambios) -->
+    <div id="success-modal" class="hidden fixed inset-0 bg-black/70 flex items-center justify-center z-[100]">
+        <div class="bg-white rounded-3xl max-w-md w-full mx-4 p-10 text-center">
+            <div class="w-20 h-20 mx-auto bg-emerald-100 rounded-2xl flex items-center justify-center text-4xl mb-6">🎉</div>
+            <h3 class="text-3xl font-bold mb-3" id="modal-title">¡Reserva Confirmada!</h3>
+            <p class="text-gray-600 mb-8" id="modal-text">Tu boleto ha sido enviado a tu correo electrónico.</p>
+            <button onclick="window.location.reload()" 
+                    class="w-full bg-teal-700 text-white py-5 rounded-2xl font-semibold" id="modal-btn">Volver al Inicio</button>
+        </div>
+    </div>
+
+    <footer class="bg-gray-900 text-white py-16 mt-24">
+        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-10">
+            <div>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-9 h-9 bg-teal-600 rounded-2xl flex items-center justify-center text-2xl">🚢</div>
+                    <span class="font-bold text-2xl" id="footer-logo">Naviera Tambor</span>
+                </div>
+                <p class="text-gray-400 text-sm" id="footer-desc">Conectando Puntarenas y la Península de Nicoya desde 1992.</p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4" id="enlaces-title">Enlaces Rápidos</h4>
+                <ul class="space-y-2 text-sm text-gray-400">
+                    <li><a href="#" onclick="showSection('horarios')" class="hover:text-white">Horarios Actuales</a></li>
+                    <li><a href="#" onclick="showSection('tarifas')" class="hover:text-white">Tarifas</a></li>
+                    <li><a href="#" onclick="showSection('contacto')" class="hover:text-white">Preguntas Frecuentes</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4" id="contacto-title">Contacto</h4>
+                <p class="text-sm text-gray-400">+506 2661-2084</p>
+                <p class="text-sm text-gray-400">info@navieratambor.com</p>
+            </div>
+            <div>
+                <p class="text-xs text-gray-500">© 2026 Naviera Tambor. Todos los derechos reservados.<br>Este es un sitio de demostración moderno.</p>
             </div>
         </div>
     </footer>
 
-    <!-- RESERVATION MODAL -->
-    <div id="reservation-modal" class="hidden fixed inset-0 bg-black/90 z-[100] flex items-center justify-center">
-        <div class="bg-zinc-900 rounded-3xl max-w-md w-full mx-4 p-10 relative">
-            <button onclick="closeModal()" class="absolute top-6 right-6 text-4xl hover:text-red-500">&times;</button>
-            <h3 id="modal-title" class="text-3xl mb-8 text-center">Iniciar Reserva</h3>
-            <input type="text" id="name-input" placeholder="Nombre completo" class="w-full px-6 py-4 bg-zinc-800 rounded-2xl mb-4">
-            <input type="email" id="email-input" placeholder="Correo electrónico" class="w-full px-6 py-4 bg-zinc-800 rounded-2xl mb-4">
-            <input type="text" id="license-input" placeholder="Número de licencia" class="w-full px-6 py-4 bg-zinc-800 rounded-2xl mb-8">
-            <button onclick="submitReservation()" class="w-full py-6 bg-blue-600 rounded-2xl text-xl font-semibold" id="modal-btn">Continuar al Pago</button>
-        </div>
-    </div>
-
     <script>
+        // === TU CÓDIGO ORIGINAL (sin cambios internos) ===
+        let currentStep = 1;
+        let selectedVehiclePrice = 14500;
+        let adults = 2, children = 0, seniors = 0;
         let currentLang = 'es';
-        let selectedCompare = [];
 
         const translations = {
             es: {
-                logo: "OceanDrive",
-                navReserve: "Reservar Ahora",
-                navFleet: "Flota",
-                navCompare: "Comparar",
-                navTestimonials: "Testimonios",
-                heroTitle: "Alquila. Reserva.<br>Transporta por mar.",
-                heroSubtitle: "La forma más fácil y segura de alquilar tu vehículo con transporte marítimo.",
-                flotaTitle: "Nuestra Flota",
-                compareTitle: "Compara hasta 3 vehículos",
-                compareHeader: "Vehículos Seleccionados",
-                clearBtn: "Limpiar Todo",
-                testimonialsTitle: "Lo que dicen nuestros clientes",
-                footerCta: "¿Listo para tu próximo viaje?",
-                footerReserve: "Hacer Reserva",
-                modalTitle: "Iniciar Reserva",
-                namePlaceholder: "Nombre completo",
-                emailPlaceholder: "Correo electrónico",
-                licensePlaceholder: "Número de licencia",
-                modalBtn: "Continuar al Pago"
+                logo: "Naviera Tambor",
+                ssl: "Seguro SSL",
+                reservarAhora: "Reservar Ahora",
+                heroRoute: "Puntarenas ↔ Paquera",
+                heroTitle: "Cruza el Golfo de Nicoya con comodidad",
+                heroSubtitle: "Reserva tu ferry con vehículo, pasajeros y mascotas. Experiencia moderna, segura y confiable.",
+                heroButton: "Iniciar Reserva",
+                prog1: "Vehículo & Pasajeros",
+                prog2: "Itinerario",
+                prog3: "Confirmar",
+                prog4: "Pago",
+                step1Title: "Tipo de Vehículo y Pasajeros",
+                vehiculoTitle: "Tipo de Vehículo",
+                vehAuto: "Automóvil",
+                vehAutoDesc: "Hasta 5 pasajeros",
+                vehSuv: "4x4 / SUV",
+                vehSuvDesc: "Hasta 7 pasajeros",
+                vehPasajeros: "Solo Pasajeros",
+                vehPasajerosDesc: "Sin vehículo",
+                vehVan: "Van / Camioneta",
+                vehVanDesc: "Hasta 15 pasajeros",
+                pasajerosTitle: "Número de Pasajeros",
+                labelAdultos: "Adultos (12+ años)",
+                labelNinos: "Niños (3-11 años)",
+                labelMayores: "Mayores (65+)",
+                subtotal: "Subtotal estimado",
+                notaConductor: "El conductor del vehículo cuenta como adulto",
+                btnContinuar: "Continuar",
+                step2Title: "Elige Ruta, Fecha y Horario",
+                labelDireccion: "Dirección",
+                labelFecha: "Fecha",
+                labelHorario: "Horario",
+                infoTitle: "Información importante",
+                confirmTitle: "Confirma tus datos",
+                btnEditar: "Editar",
+                btnPago: "Continuar al Pago",
+                step4Title: "Resumen y Pago",
+                facturacionTitle: "Datos de Facturación",
+                resumenPago: "Resumen de Pago",
+                totalText: "Total",
+                tarjetaTitle: "Información de Tarjeta",
+                labelCard: "Número de Tarjeta",
+                labelExp: "Fecha de expiración",
+                labelCvc: "CVC",
+                btnVolver: "Volver",
+                pagarText: "Pagar y Confirmar",
+                modalTitle: "¡Reserva Confirmada!",
+                modalText: "Tu boleto ha sido enviado a tu correo electrónico.",
+                modalBtn: "Volver al Inicio",
+                navReservar: "Reservar",
+                navHorarios: "Horarios",
+                navTarifas: "Tarifas",
+                navContacto: "Contacto"
             },
             en: {
-                logo: "OceanDrive",
-                navReserve: "Book Now",
-                navFleet: "Fleet",
-                navCompare: "Compare",
-                navTestimonials: "Testimonials",
-                heroTitle: "Rent. Reserve.<br>Ship by Sea.",
-                heroSubtitle: "The easiest and safest way to rent your vehicle with maritime shipping.",
-                flotaTitle: "Our Fleet",
-                compareTitle: "Compare up to 3 vehicles",
-                compareHeader: "Selected Vehicles",
-                clearBtn: "Clear All",
-                testimonialsTitle: "What our clients say",
-                footerCta: "Ready for your next journey?",
-                footerReserve: "Make Reservation",
-                modalTitle: "Start Booking",
-                namePlaceholder: "Full Name",
-                emailPlaceholder: "Email Address",
-                licensePlaceholder: "License Number",
-                modalBtn: "Continue to Payment"
+                logo: "Naviera Tambor",
+                ssl: "SSL Secure",
+                reservarAhora: "Book Now",
+                heroRoute: "Puntarenas ↔ Paquera",
+                heroTitle: "Cross the Gulf of Nicoya with Comfort",
+                heroSubtitle: "Book your ferry with vehicle, passengers and pets. Modern, safe and reliable experience.",
+                heroButton: "Start Booking",
+                prog1: "Vehicle & Passengers",
+                prog2: "Schedule",
+                prog3: "Confirm",
+                prog4: "Payment",
+                step1Title: "Vehicle Type and Passengers",
+                vehiculoTitle: "Vehicle Type",
+                vehAuto: "Car",
+                vehAutoDesc: "Up to 5 passengers",
+                vehSuv: "4x4 / SUV",
+                vehSuvDesc: "Up to 7 passengers",
+                vehPasajeros: "Passengers Only",
+                vehPasajerosDesc: "No vehicle",
+                vehVan: "Van",
+                vehVanDesc: "Up to 15 passengers",
+                pasajerosTitle: "Number of Passengers",
+                labelAdultos: "Adults (12+ years)",
+                labelNinos: "Children (3-11 years)",
+                labelMayores: "Seniors (65+)",
+                subtotal: "Estimated subtotal",
+                notaConductor: "The driver counts as an adult",
+                btnContinuar: "Continue",
+                step2Title: "Choose Route, Date and Schedule",
+                labelDireccion: "Route",
+                labelFecha: "Date",
+                labelHorario: "Schedule",
+                infoTitle: "Important Information",
+                confirmTitle: "Confirm Your Details",
+                btnEditar: "Edit",
+                btnPago: "Continue to Payment",
+                step4Title: "Summary and Payment",
+                facturacionTitle: "Billing Information",
+                resumenPago: "Payment Summary",
+                totalText: "Total",
+                tarjetaTitle: "Card Information",
+                labelCard: "Card Number",
+                labelExp: "Expiration Date",
+                labelCvc: "CVC",
+                btnVolver: "Back",
+                pagarText: "Pay and Confirm",
+                modalTitle: "Booking Confirmed!",
+                modalText: "Your ticket has been sent to your email.",
+                modalBtn: "Back to Home",
+                navReservar: "Book",
+                navHorarios: "Schedules",
+                navTarifas: "Rates",
+                navContacto: "Contact"
             }
         };
 
-        const cars = [
-            {id:1, name:"Toyota RAV4 Hybrid", price:89, hp:219, cons:6.8, weight:1650, img:"https://picsum.photos/id/1015/600/400"},
-            {id:2, name:"Honda CR-V", price:79, hp:190, cons:7.5, weight:1580, img:"https://picsum.photos/id/133/600/400"},
-            {id:3, name:"Ford F-150", price:115, hp:400, cons:12, weight:2100, img:"https://picsum.photos/id/201/600/400"},
-            {id:4, name:"Tesla Model Y", price:139, hp:450, cons:2.8, weight:2000, img:"https://picsum.photos/id/251/600/400"},
-            {id:5, name:"BMW X5", price:149, hp:335, cons:9.8, weight:2180, img:"https://picsum.photos/id/180/600/400"},
-            {id:6, name:"Mercedes GLC 300", price:129, hp:255, cons:8.2, weight:1920, img:"https://picsum.photos/id/201/600/400"},
-            {id:7, name:"Jeep Wrangler Rubicon", price:95, hp:285, cons:11.5, weight:2200, img:"https://picsum.photos/id/251/600/400"},
-            {id:8, name:"Porsche Cayenne", price:189, hp:348, cons:10.5, weight:2250, img:"https://picsum.photos/id/133/600/400"},
-            {id:9, name:"Chevrolet Tahoe", price:135, hp:355, cons:13.2, weight:2450, img:"https://picsum.photos/id/1015/600/400"},
-            {id:10, name:"Hyundai Tucson Hybrid", price:69, hp:227, cons:6.2, weight:1620, img:"https://picsum.photos/id/180/600/400"},
-            {id:11, name:"Audi Q5", price:145, hp:261, cons:8.9, weight:1950, img:"https://picsum.photos/id/201/600/400"},
-            {id:12, name:"Subaru Outback", price:75, hp:182, cons:7.9, weight:1680, img:"https://picsum.photos/id/133/600/400"}
-        ];
-
-        function renderCars() {
-            const grid = document.getElementById('cars-grid');
-            grid.innerHTML = '';
-
-            cars.forEach(car => {
-                const card = document.createElement('div');
-                card.className = 'car-card bg-zinc-900 rounded-3xl overflow-hidden group hover:scale-105 transition-all';
-                card.innerHTML = `
-                    <img src="${car.img}" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="text-xl font-semibold mb-1">${car.name}</h3>
-                        <p class="text-blue-400 text-2xl font-bold">$${car.price}<span class="text-sm font-normal text-zinc-400">/día</span></p>
-                        
-                        <div class="grid grid-cols-3 gap-2 my-6 text-sm">
-                            <div class="text-center">
-                                <p class="text-zinc-400">HP</p>
-                                <p class="font-semibold">${car.hp}</p>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-zinc-400">Consumo</p>
-                                <p class="font-semibold">${car.cons} L/100km</p>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-zinc-400">Peso</p>
-                                <p class="font-semibold">${car.weight} kg</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex gap-3">
-                            <button onclick="addToCompare(${car.id})" 
-                                    class="flex-1 py-3 border border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white rounded-2xl text-sm font-medium transition">
-                                <i class="fa-solid fa-plus mr-1"></i> Comparar
-                            </button>
-                            <button onclick="showReservationModal()" 
-                                    class="flex-1 py-3 bg-blue-600 hover:bg-blue-700 rounded-2xl text-sm font-semibold transition">
-                                Reservar
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
+        function toggleLanguage() {
+            currentLang = currentLang === 'es' ? 'en' : 'es';
+            document.getElementById('current-lang').textContent = currentLang.toUpperCase();
+            updateLanguage();
         }
 
         function updateLanguage() {
             const t = translations[currentLang];
-
-            document.getElementById('logo').textContent = t.logo;
-            document.getElementById('nav-reserve').textContent = t.navReserve;
-            document.getElementById('nav-fleet').textContent = t.navFleet;
-            document.getElementById('nav-compare').textContent = t.navCompare;
-            document.getElementById('nav-testimonials').textContent = t.navTestimonials;
-            document.getElementById('mobile-nav-fleet').textContent = t.navFleet;
-            document.getElementById('mobile-nav-compare').textContent = t.navCompare;
-            document.getElementById('mobile-nav-testimonials').textContent = t.navTestimonials;
-
-            document.getElementById('hero-title').innerHTML = t.heroTitle;
+            document.getElementById('logo-text').textContent = t.logo;
+            document.getElementById('ssl-text').textContent = t.ssl;
+            document.getElementById('reservar-ahora-text').textContent = t.reservarAhora;
+            document.getElementById('hero-route').textContent = t.heroRoute;
+            document.getElementById('hero-title').textContent = t.heroTitle;
             document.getElementById('hero-subtitle').textContent = t.heroSubtitle;
-            document.getElementById('flota-title').textContent = t.flotaTitle;
-            document.getElementById('compare-title').textContent = t.compareTitle;
-            document.getElementById('compare-header').textContent = t.compareHeader;
-            document.getElementById('clear-btn').textContent = t.clearBtn;
-            document.getElementById('testimonials-title').textContent = t.testimonialsTitle;
-            document.getElementById('footer-cta').textContent = t.footerCta;
-            document.getElementById('footer-reserve').textContent = t.footerReserve;
+            document.getElementById('hero-button').childNodes[0].textContent = t.heroButton + " ";
+            
+            document.getElementById('prog-1').textContent = t.prog1;
+            document.getElementById('prog-2').textContent = t.prog2;
+            document.getElementById('prog-3').textContent = t.prog3;
+            document.getElementById('prog-4').textContent = t.prog4;
+            
+            document.getElementById('step1-title').childNodes[2].textContent = " " + t.step1Title;
+            document.getElementById('vehiculo-title').textContent = t.vehiculoTitle;
+            document.getElementById('veh-auto').textContent = t.vehAuto;
+            document.getElementById('veh-auto-desc').textContent = t.vehAutoDesc;
+            document.getElementById('veh-suv').textContent = t.vehSuv;
+            document.getElementById('veh-suv-desc').textContent = t.vehSuvDesc;
+            document.getElementById('veh-pasajeros').textContent = t.vehPasajeros;
+            document.getElementById('veh-pasajeros-desc').textContent = t.vehPasajerosDesc;
+            document.getElementById('veh-van').textContent = t.vehVan;
+            document.getElementById('veh-van-desc').textContent = t.vehVanDesc;
+            
+            document.getElementById('pasajeros-title').textContent = t.pasajerosTitle;
+            document.getElementById('label-adultos').textContent = t.labelAdultos;
+            document.getElementById('label-ninos').textContent = t.labelNinos;
+            document.getElementById('label-mayores').textContent = t.labelMayores;
+            document.getElementById('subtotal-text').textContent = t.subtotal;
+            document.getElementById('nota-conductor').textContent = t.notaConductor;
+            document.getElementById('btn-continuar1').childNodes[0].textContent = t.btnContinuar + " ";
+            
+            document.getElementById('step2-title').childNodes[2].textContent = " " + t.step2Title;
+            document.getElementById('label-direccion').textContent = t.labelDireccion;
+            document.getElementById('label-fecha').textContent = t.labelFecha;
+            document.getElementById('label-horario').textContent = t.labelHorario;
+            document.getElementById('info-title').textContent = t.infoTitle;
+            document.getElementById('btn-anterior').textContent = t.btnVolver;
+            document.getElementById('btn-siguiente').childNodes[0].textContent = t.btnContinuar + " ";
+            
+            document.getElementById('confirm-title').textContent = t.confirmTitle;
+            document.getElementById('btn-editar').textContent = t.btnEditar;
+            document.getElementById('btn-pago').textContent = t.btnPago;
+            
+            document.getElementById('step4-title').childNodes[2].textContent = " " + t.step4Title;
+            document.getElementById('facturacion-title').textContent = t.facturacionTitle;
+            document.getElementById('resumen-pago').textContent = t.resumenPago;
+            document.getElementById('total-text').textContent = t.totalText;
+            document.getElementById('tarjeta-title').textContent = t.tarjetaTitle;
+            document.getElementById('label-card').textContent = t.labelCard;
+            document.getElementById('label-exp').textContent = t.labelExp;
+            document.getElementById('label-cvc').textContent = t.labelCvc;
+            document.getElementById('btn-volver').textContent = t.btnVolver;
+            document.getElementById('pagar-text').textContent = t.pagarText;
+            
             document.getElementById('modal-title').textContent = t.modalTitle;
-            document.getElementById('name-input').placeholder = t.namePlaceholder;
-            document.getElementById('email-input').placeholder = t.emailPlaceholder;
-            document.getElementById('license-input').placeholder = t.licensePlaceholder;
+            document.getElementById('modal-text').textContent = t.modalText;
             document.getElementById('modal-btn').textContent = t.modalBtn;
-
-            document.getElementById('lang-btn').textContent = currentLang.toUpperCase();
+            
+            document.getElementById('nav-reservar').textContent = t.navReservar;
+            document.getElementById('nav-horarios').textContent = t.navHorarios;
+            document.getElementById('nav-tarifas').textContent = t.navTarifas;
+            document.getElementById('nav-contacto').textContent = t.navContacto;
+            document.getElementById('footer-logo').textContent = t.logo;
+            document.getElementById('footer-desc').textContent = currentLang === 'es' ? 
+                "Conectando Puntarenas y la Península de Nicoya desde 1992." : 
+                "Connecting Puntarenas and the Nicoya Peninsula since 1992.";
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'es' ? 'en' : 'es';
-            updateLanguage();
+        function updatePassengers() {
+            adults = parseInt(document.getElementById('adults').value);
+            children = parseInt(document.getElementById('children').value);
+            seniors = parseInt(document.getElementById('seniors').value);
+            document.getElementById('adults-count').textContent = adults;
+            document.getElementById('children-count').textContent = children;
+            document.getElementById('seniors-count').textContent = seniors;
+            const totalPassengers = adults + children + seniors;
+            const estimated = selectedVehiclePrice + (totalPassengers * 1200);
+            document.getElementById('step1-total').textContent = '¢' + estimated.toLocaleString('es-CR');
         }
-
-        function addToCompare(id) {
-            const car = cars.find(c => c.id === id);
-            if (!car) return;
-            if (selectedCompare.length >= 3) {
-                alert(currentLang === 'es' ? "Solo puedes comparar hasta 3 vehículos" : "You can only compare up to 3 vehicles");
-                return;
+        
+        function selectVehicle(el) {
+            document.querySelectorAll('.vehicle-option').forEach(opt => opt.classList.remove('border-teal-700', 'bg-teal-50'));
+            el.classList.add('border-teal-700', 'bg-teal-50');
+            selectedVehiclePrice = parseInt(el.dataset.price);
+            updatePassengers();
+        }
+        
+        function showStep(n) {
+            document.querySelectorAll('.step-content').forEach(step => step.classList.add('hidden'));
+            document.getElementById('step-' + n).classList.remove('hidden');
+            for (let i = 1; i <= 4; i++) {
+                const circle = document.getElementById('step' + i + '-circle');
+                if (circle) {
+                    if (i < n) { circle.classList.add('bg-teal-700','text-white'); circle.classList.remove('bg-gray-200'); }
+                    else if (i === n) { circle.classList.add('bg-teal-700','text-white'); circle.classList.remove('bg-gray-200'); }
+                    else { circle.classList.remove('bg-teal-700','text-white'); circle.classList.add('bg-gray-200'); }
+                }
             }
-            if (selectedCompare.some(c => c.id === id)) {
-                alert(currentLang === 'es' ? "Este vehículo ya está en la comparación" : "This vehicle is already in comparison");
-                return;
-            }
-            selectedCompare.push(car);
-            renderComparison();
         }
-
-        function renderComparison() {
-            const area = document.getElementById('comparison-area');
-            const grid = document.getElementById('compare-grid');
-            grid.innerHTML = '';
-
-            selectedCompare.forEach((car, index) => {
-                const div = document.createElement('div');
-                div.className = 'bg-zinc-900 rounded-3xl p-6 relative';
-                div.innerHTML = `
-                    <img src="${car.img}" class="w-full h-40 object-cover rounded-2xl mb-4">
-                    <h4 class="font-semibold text-lg">${car.name}</h4>
-                    <p class="text-blue-400 text-2xl font-bold">$${car.price}/día</p>
-                    <div class="mt-4 space-y-2 text-sm">
-                        <div class="flex justify-between"><span class="text-zinc-400">Potencia</span><span>${car.hp} HP</span></div>
-                        <div class="flex justify-between"><span class="text-zinc-400">Consumo</span><span>${car.cons} L/100km</span></div>
-                        <div class="flex justify-between"><span class="text-zinc-400">Peso</span><span>${car.weight} kg</span></div>
+        
+        function nextStep() {
+            if (currentStep < 4) {
+                currentStep++;
+                showStep(currentStep);
+                if (currentStep === 3) generateSummary();
+                if (currentStep === 4) generateFinalSummary();
+            }
+        }
+        
+        function prevStep() {
+            if (currentStep > 1) { currentStep--; showStep(currentStep); }
+        }
+        
+        function goToStep(n) { currentStep = n; showStep(n); }
+        
+        function generateSummary() {
+            const direction = document.getElementById('direction').options[document.getElementById('direction').selectedIndex].text;
+            const date = document.getElementById('travel-date').value;
+            const time = document.getElementById('schedule').value;
+            const html = `
+                <div class="grid grid-cols-2 gap-y-6">
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-gray-500">Ruta</p>
+                        <p class="font-semibold">${direction}</p>
                     </div>
-                    <button onclick="removeFromCompare(${index})" class="absolute top-4 right-4 text-red-400 hover:text-red-500 text-xl">✕</button>
-                `;
-                grid.appendChild(div);
-            });
-
-            area.classList.remove('hidden');
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-gray-500">Fecha y Hora</p>
+                        <p class="font-semibold">${date} - ${time}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-gray-500">Vehículo</p>
+                        <p class="font-semibold">Automóvil</p>
+                    </div>
+                    <div>
+                        <p class="text-xs uppercase tracking-widest text-gray-500">Pasajeros</p>
+                        <p class="font-semibold">${adults} Adultos, ${children} Niños, ${seniors} Mayores</p>
+                    </div>
+                </div>
+            `;
+            document.getElementById('summary').innerHTML = html;
+        }
+        
+        function generateFinalSummary() {
+            const total = selectedVehiclePrice + ((adults + children + seniors) * 1200);
+            document.getElementById('final-total').textContent = '¢' + total.toLocaleString('es-CR');
+            const html = `
+                <div class="flex justify-between">
+                    <span>Vehículo</span>
+                    <span>¢${selectedVehiclePrice.toLocaleString('es-CR')}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Pasajeros (${adults + children + seniors})</span>
+                    <span>¢${((adults + children + seniors) * 1200).toLocaleString('es-CR')}</span>
+                </div>
+            `;
+            document.getElementById('final-summary').innerHTML = html;
+        }
+        
+        function completeBooking() {
+            document.getElementById('success-modal').classList.remove('hidden');
         }
 
-        function removeFromCompare(index) {
-            selectedCompare.splice(index, 1);
-            if (selectedCompare.length === 0) {
-                document.getElementById('comparison-area').classList.add('hidden');
-            } else {
-                renderComparison();
-            }
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section).classList.add('active');
+            window.scrollTo({ top: 100, behavior: 'smooth' });
         }
 
-        function clearComparison() {
-            selectedCompare = [];
-            document.getElementById('comparison-area').classList.add('hidden');
-        }
-
-        function showReservationModal() {
-            document.getElementById('reservation-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('reservation-modal').classList.add('hidden');
-        }
-
-        function submitReservation() {
-            alert(currentLang === 'es' ? "Reserva iniciada (demo)" : "Booking started (demo)");
-            closeModal();
-        }
-
-        window.onload = () => {
-            renderCars();
+        window.onload = function() {
+            showStep(1);
+            updatePassengers();
+            const dateInput = document.getElementById('travel-date');
+            const today = new Date();
+            const minDate = today.toISOString().split('T')[0];
+            dateInput.setAttribute('min', minDate);
             updateLanguage();
+            showSection('booking');
         };
     </script>
 </body>
