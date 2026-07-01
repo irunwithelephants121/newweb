@@ -367,33 +367,33 @@
         </div>
     </div>
 
-    <!-- ==================== TARIFAS - Comparador de Vehículos (6 vehículos en 2x3) ==================== -->
+    <!-- ==================== TARIFAS - Comparador de Vehículos ==================== -->
     <div id="tarifas" class="section max-w-5xl mx-auto px-6 py-16">
         <h2 class="text-4xl font-bold text-center mb-12" id="tarifas-title">Tarifas y Comparador de Vehículos</h2>
         <div class="grid md:grid-cols-3 gap-8">
             <!-- Fila 1 -->
             <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                <h3 class="text-2xl font-semibold mb-4">Automóvil</h3>
-                <p class="text-4xl font-bold text-teal-700 mb-6">C$14,500</p>
-                <ul class="space-y-3 text-sm">
+                <h3 class="text-2xl font-semibold mb-4" id="tarifa-auto-title">Automóvil</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6" id="tarifa-auto-precio">C$14,500</p>
+                <ul class="space-y-3 text-sm" id="tarifa-auto-lista">
                     <li>✔ Hasta 5 pasajeros</li>
                     <li>✔ Consumo aprox: 8-10 L/100km</li>
                     <li>✔ Ideal para familias pequeñas</li>
                 </ul>
             </div>
             <div class="bg-white p-8 rounded-3xl shadow-lg card-hover border-2 border-teal-700">
-                <h3 class="text-2xl font-semibold mb-4">4x4 / SUV</h3>
-                <p class="text-4xl font-bold text-teal-700 mb-6">C$18,500</p>
-                <ul class="space-y-3 text-sm">
+                <h3 class="text-2xl font-semibold mb-4" id="tarifa-suv-title">4x4 / SUV</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6" id="tarifa-suv-precio">C$18,500</p>
+                <ul class="space-y-3 text-sm" id="tarifa-suv-lista">
                     <li>✔ Hasta 7 pasajeros</li>
                     <li>✔ Consumo aprox: 10-12 L/100km</li>
                     <li>✔ Mejor para caminos irregulares</li>
                 </ul>
             </div>
             <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                <h3 class="text-2xl font-semibold mb-4">Van / Camioneta</h3>
-                <p class="text-4xl font-bold text-teal-700 mb-6">C$32,000</p>
-                <ul class="space-y-3 text-sm">
+                <h3 class="text-2xl font-semibold mb-4" id="tarifa-van-title">Van / Camioneta</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6" id="tarifa-van-precio">C$32,000</p>
+                <ul class="space-y-3 text-sm" id="tarifa-van-lista">
                     <li>✔ Hasta 15 pasajeros</li>
                     <li>✔ Consumo aprox: 14-16 L/100km</li>
                     <li>✔ Para grupos grandes</li>
@@ -402,27 +402,27 @@
 
             <!-- Fila 2 -->
             <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                <h3 class="text-2xl font-semibold mb-4">Moto</h3>
-                <p class="text-4xl font-bold text-teal-700 mb-6">C$8,500</p>
-                <ul class="space-y-3 text-sm">
+                <h3 class="text-2xl font-semibold mb-4" id="tarifa-moto-title">Moto</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6" id="tarifa-moto-precio">C$8,500</p>
+                <ul class="space-y-3 text-sm" id="tarifa-moto-lista">
                     <li>✔ 1-2 pasajeros</li>
                     <li>✔ Consumo aprox: 4-6 L/100km</li>
                     <li>✔ Económica y rápida</li>
                 </ul>
             </div>
             <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                <h3 class="text-2xl font-semibold mb-4">Camión Pequeño</h3>
-                <p class="text-4xl font-bold text-teal-700 mb-6">C$45,000</p>
-                <ul class="space-y-3 text-sm">
+                <h3 class="text-2xl font-semibold mb-4" id="tarifa-camion-title">Camión Pequeño</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6" id="tarifa-camion-precio">C$45,000</p>
+                <ul class="space-y-3 text-sm" id="tarifa-camion-lista">
                     <li>✔ Hasta 3 pasajeros + carga</li>
                     <li>✔ Consumo aprox: 18-22 L/100km</li>
                     <li>✔ Para transporte de mercancía</li>
                 </ul>
             </div>
             <div class="bg-white p-8 rounded-3xl shadow-lg card-hover">
-                <h3 class="text-2xl font-semibold mb-4">Autobús / Mini Bus</h3>
-                <p class="text-4xl font-bold text-teal-700 mb-6">C$85,000</p>
-                <ul class="space-y-3 text-sm">
+                <h3 class="text-2xl font-semibold mb-4" id="tarifa-bus-title">Autobús / Mini Bus</h3>
+                <p class="text-4xl font-bold text-teal-700 mb-6" id="tarifa-bus-precio">C$85,000</p>
+                <ul class="space-y-3 text-sm" id="tarifa-bus-lista">
                     <li>✔ Hasta 30 pasajeros</li>
                     <li>✔ Consumo aprox: 25-30 L/100km</li>
                     <li>✔ Para tours y grupos grandes</li>
@@ -438,10 +438,10 @@
             <table class="w-full">
                 <thead>
                     <tr class="border-b">
-                        <th class="text-left py-4">Hora Salida</th>
-                        <th class="text-left py-4">Llegada</th>
-                        <th class="text-left py-4">Disponibilidad Vehículos</th>
-                        <th class="text-center py-4">Estado</th>
+                        <th class="text-left py-4" id="th-salida">Hora Salida</th>
+                        <th class="text-left py-4" id="th-llegada">Llegada</th>
+                        <th class="text-left py-4" id="th-disponibilidad">Disponibilidad Vehículos</th>
+                        <th class="text-center py-4" id="th-estado">Estado</th>
                     </tr>
                 </thead>
                 <tbody class="text-sm">
@@ -459,16 +459,16 @@
         <h2 class="text-4xl font-bold text-center mb-12" id="contacto-title">Contáctanos</h2>
         <div class="grid md:grid-cols-2 gap-12">
             <div>
-                <h3 class="text-2xl font-semibold mb-6">Información de la Empresa</h3>
-                <p class="mb-4"><strong>Naviera Tambor S.A.</strong></p>
-                <p class="mb-4">• Teléfono: +506 2661-2084</p>
-                <p class="mb-4">• Email: info@navieratambor.com</p>
-                <p class="mb-8">Más de 30 años conectando Puntarenas con la Península de Nicoya.</p>
+                <h3 class="text-2xl font-semibold mb-6" id="contacto-empresa-title">Información de la Empresa</h3>
+                <p class="mb-4"><strong id="empresa-name">Naviera Tambor S.A.</strong></p>
+                <p class="mb-4">• <span id="contacto-tel-label">Teléfono:</span> +506 2661-2084</p>
+                <p class="mb-4">• <span id="contacto-email-label">Email:</span> info@navieratambor.com</p>
+                <p class="mb-8" id="contacto-desc">Más de 30 años conectando Puntarenas con la Península de Nicoya.</p>
             </div>
             <div>
-                <h3 class="text-2xl font-semibold mb-6">Ubicación</h3>
-                <p>Terminal Ferry Puntarenas - Barrio El Carmen</p>
-                <p class="text-gray-600 mt-8">Horario de atención: 4:00 AM - 10:00 PM</p>
+                <h3 class="text-2xl font-semibold mb-6" id="contacto-ubicacion-title">Ubicación</h3>
+                <p id="contacto-direccion">Terminal Ferry Puntarenas - Barrio El Carmen</p>
+                <p class="text-gray-600 mt-8" id="contacto-horario">Horario de atención: 4:00 AM - 10:00 PM</p>
             </div>
         </div>
     </div>
@@ -502,7 +502,7 @@
                 </ul>
             </div>
             <div>
-                <h4 class="font-semibold mb-4" id="contacto-title">Contacto</h4>
+                <h4 class="font-semibold mb-4" id="footer-contacto-title">Contacto</h4>
                 <p class="text-sm text-gray-400">+506 2661-2084</p>
                 <p class="text-sm text-gray-400">info@navieratambor.com</p>
             </div>
@@ -513,7 +513,7 @@
     </footer>
 
     <script>
-        // === TU CÓDIGO ORIGINAL (sin cambios internos) ===
+        // === TU CÓDIGO ORIGINAL + TRADUCCIONES NUEVAS ===
         let currentStep = 1;
         let selectedVehiclePrice = 14500;
         let adults = 2, children = 0, seniors = 0;
@@ -573,7 +573,31 @@
                 navReservar: "Reservar",
                 navHorarios: "Horarios",
                 navTarifas: "Tarifas",
-                navContacto: "Contacto"
+                navContacto: "Contacto",
+                // === NUEVAS TRADUCCIONES ===
+                tarifasTitle: "Tarifas y Comparador de Vehículos",
+                horariosTitle: "Horarios y Disponibilidad",
+                contactoTitle: "Contáctanos",
+                contactoEmpresaTitle: "Información de la Empresa",
+                empresaName: "Naviera Tambor S.A.",
+                contactoTelLabel: "Teléfono:",
+                contactoEmailLabel: "Email:",
+                contactoDesc: "Más de 30 años conectando Puntarenas con la Península de Nicoya.",
+                contactoUbicacionTitle: "Ubicación",
+                contactoDireccion: "Terminal Ferry Puntarenas - Barrio El Carmen",
+                contactoHorario: "Horario de atención: 4:00 AM - 10:00 PM",
+                thSalida: "Hora Salida",
+                thLlegada: "Llegada",
+                thDisponibilidad: "Disponibilidad Vehículos",
+                thEstado: "Estado",
+                tarifaAutoTitle: "Automóvil",
+                tarifaSuvTitle: "4x4 / SUV",
+                tarifaVanTitle: "Van / Camioneta",
+                tarifaMotoTitle: "Moto",
+                tarifaCamionTitle: "Camión Pequeño",
+                tarifaBusTitle: "Autobús / Mini Bus",
+                enlacesTitle: "Enlaces Rápidos",
+                footerContactoTitle: "Contacto"
             },
             en: {
                 logo: "Naviera Tambor",
@@ -628,7 +652,31 @@
                 navReservar: "Book",
                 navHorarios: "Schedules",
                 navTarifas: "Rates",
-                navContacto: "Contact"
+                navContacto: "Contact",
+                // === NUEVAS TRADUCCIONES ===
+                tarifasTitle: "Rates and Vehicle Comparator",
+                horariosTitle: "Schedules and Availability",
+                contactoTitle: "Contact Us",
+                contactoEmpresaTitle: "Company Information",
+                empresaName: "Naviera Tambor S.A.",
+                contactoTelLabel: "Phone:",
+                contactoEmailLabel: "Email:",
+                contactoDesc: "Over 30 years connecting Puntarenas with the Nicoya Peninsula.",
+                contactoUbicacionTitle: "Location",
+                contactoDireccion: "Puntarenas Ferry Terminal - Barrio El Carmen",
+                contactoHorario: "Office hours: 4:00 AM - 10:00 PM",
+                thSalida: "Departure Time",
+                thLlegada: "Arrival",
+                thDisponibilidad: "Vehicle Availability",
+                thEstado: "Status",
+                tarifaAutoTitle: "Car",
+                tarifaSuvTitle: "4x4 / SUV",
+                tarifaVanTitle: "Van",
+                tarifaMotoTitle: "Motorcycle",
+                tarifaCamionTitle: "Small Truck",
+                tarifaBusTitle: "Bus / Mini Bus",
+                enlacesTitle: "Quick Links",
+                footerContactoTitle: "Contact"
             }
         };
 
@@ -640,6 +688,8 @@
 
         function updateLanguage() {
             const t = translations[currentLang];
+            
+            // Booking + Navbar + Hero (original)
             document.getElementById('logo-text').textContent = t.logo;
             document.getElementById('ssl-text').textContent = t.ssl;
             document.getElementById('reservar-ahora-text').textContent = t.reservarAhora;
@@ -707,6 +757,38 @@
             document.getElementById('footer-desc').textContent = currentLang === 'es' ? 
                 "Conectando Puntarenas y la Península de Nicoya desde 1992." : 
                 "Connecting Puntarenas and the Nicoya Peninsula since 1992.";
+
+            // === NUEVAS SECCIONES ===
+            document.getElementById('tarifas-title').textContent = t.tarifasTitle;
+            document.getElementById('horarios-title').textContent = t.horariosTitle;
+            document.getElementById('contacto-title').textContent = t.contactoTitle;
+
+            // Tarifas
+            document.getElementById('tarifa-auto-title').textContent = t.tarifaAutoTitle;
+            document.getElementById('tarifa-suv-title').textContent = t.tarifaSuvTitle;
+            document.getElementById('tarifa-van-title').textContent = t.tarifaVanTitle;
+            document.getElementById('tarifa-moto-title').textContent = t.tarifaMotoTitle;
+            document.getElementById('tarifa-camion-title').textContent = t.tarifaCamionTitle;
+            document.getElementById('tarifa-bus-title').textContent = t.tarifaBusTitle;
+
+            // Horarios
+            document.getElementById('th-salida').textContent = t.thSalida;
+            document.getElementById('th-llegada').textContent = t.thLlegada;
+            document.getElementById('th-disponibilidad').textContent = t.thDisponibilidad;
+            document.getElementById('th-estado').textContent = t.thEstado;
+
+            // Contacto
+            document.getElementById('contacto-empresa-title').textContent = t.contactoEmpresaTitle;
+            document.getElementById('empresa-name').textContent = t.empresaName;
+            document.getElementById('contacto-tel-label').textContent = t.contactoTelLabel;
+            document.getElementById('contacto-email-label').textContent = t.contactoEmailLabel;
+            document.getElementById('contacto-desc').textContent = t.contactoDesc;
+            document.getElementById('contacto-ubicacion-title').textContent = t.contactoUbicacionTitle;
+            document.getElementById('contacto-direccion').textContent = t.contactoDireccion;
+            document.getElementById('contacto-horario').textContent = t.contactoHorario;
+
+            document.getElementById('enlaces-title').textContent = t.enlacesTitle;
+            document.getElementById('footer-contacto-title').textContent = t.footerContactoTitle;
         }
 
         function updatePassengers() {
